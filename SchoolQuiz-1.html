@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+             background: linear-gradient(to bottom, #FF9933, #FFFFFF, #138808);
+        }
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            border: none;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .options button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2 id="question">Loading...</h2>
+        <div class="options" id="options"></div>
+        <p id="score" style="display: none;"></p>
+        <button id="restart" style="display: none;" onclick="restartQuiz()">Restart Quiz</button>
+        <button id="factsButton" style="display:none;" onclick="showFacts()">Learn Interesting Facts</button>
+    </div>
+    <script>
+        const quizData = [
+            { question: "What is the capital of India?", options: ["Berlin", "New Delhi", "Paris", "Rome"], answer: "New Delhi" },
+            { question: "What is the national game of India?", options: ["Criket", "Football", "Hockey", "Chess"], answer: "Hockey" },
+            { question: "What is the national bird of India?", options: ["Peacock", "Parrot", "Piegeon", "Penguin"], answer: "Peacock" },
+            { question: "What is the national animal of India?", options: ["Elephant", "Lion", "Monkey", "Tiger"], answer: "Tiger" },
+            { question: "What is the national flower of India?", options: ["Lotus", "Rose", "Jasmine", "Lily"], answer: "Lotus" },
+            { question: "What language is spoken in  India?", options: ["English", "Many", "Indian", "Hindi"], answer: "Many" },
+            { question: "How old is Indian culture?", options: ["75 years", "100 years", "1000years", "older than 10,000yrs"], answer: "older than 10,000yrs" },
+            
+        ];
+        let currentQuestion = 0;
+        let score = 0;
+        
+        function loadQuestion() {
+            document.getElementById("question").innerText = quizData[currentQuestion].question;
+            let optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+            quizData[currentQuestion].options.forEach(option => {
+                let button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+        
+        function checkAnswer(answer) {
+            if (answer === quizData[currentQuestion].answer) {
+                score++;
+            }
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("question").innerText = "Quiz Completed!";
+                document.getElementById("options").style.display = "none";
+                document.getElementById("score").innerText = `Your Score: ${score} / ${quizData.length}`;
+                document.getElementById("score").style.display = "block";
+                document.getElementById("restart").style.display = "block";
+                document.getElementById("factsButton").style.display = "block";
+            }
+        }
+        
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById("options").style.display = "block";
+            document.getElementById("score").style.display = "none";
+            document.getElementById("restart").style.display = "none";
+            document.getElementById("factsButton").style.display = "block";
+            loadQuestion();
+        }
+        
+        loadQuestion();
+
+
+        function showFacts() {
+            document.body.innerHTML = `
+                <div class='content'>
+                    <h1>Interesting Facts About India</h1>
+                    <ul>
+                        <li>India is the world's largest democracy. </li>
+                        </hr>
+                        <li>The game of chess originated in India. </li>
+                        <li>Varanasi is the world's oldest continuously inhabited city.</li>
+                        <li>India has over 22 officially recognized languages.</li>
+                        <li>Yoga originated in India over 5,000 years ago. </li>
+                        <li>ISRO on February 15, 2017, created history and world record by successfully launching 104 satellites on a single mission. 
+                            India overtook the previous record of 37 satellites launched (by Russia in 2014). 
+                            The satellites were launched using the launch vehicle of the Indian Space Research Organisation (ISRO) PSLV C37. </li>
+                        <li>India has become the first country to successfully land a spacecraft on the moon's south pole </li>    
+                    </ul>
+                    <button onclick="location.reload()">Back to Quiz</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
